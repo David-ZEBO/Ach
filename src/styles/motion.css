@@ -1,0 +1,122 @@
+/* =====================================================================
+   Animations ACH : un seul langage de mouvement, sobre et fluide.
+   Courbe commune « sortie douce », durées 0,25 à 0,6 s.
+   Tout est désactivé si l'utilisateur demande moins d'animations.
+   ===================================================================== */
+:root { --ease: cubic-bezier(.2, .7, .2, 1); --ease-in-out: cubic-bezier(.65, 0, .35, 1); }
+
+/* ---------- Transition de page ---------- */
+.page-enter { animation: page-in .45s var(--ease) both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Apparition au défilement (posée par useReveal, uniquement sous la ligne de flottaison) ---------- */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity .6s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--rv-i, 0) * 70ms); will-change: opacity, transform; }
+.rv.rv-in { opacity: 1; transform: none; }
+.rv.rv-scale { transform: translateY(14px) scale(.98); }
+.rv.rv-scale.rv-in { transform: none; }
+
+/* ---------- En-tête ---------- */
+header.site { transition: box-shadow .3s var(--ease), background .3s var(--ease); }
+header.site.scrolled { box-shadow: 0 10px 30px -18px rgba(11, 27, 77, .45); background: rgba(255, 255, 255, .96); backdrop-filter: saturate(1.4) blur(8px); }
+@media (min-width: 1241px) {
+  .navlink { position: relative; border-bottom-color: transparent !important; }
+  .navlink::before { content: ''; position: absolute; left: 10px; right: 10px; bottom: 0; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+  .navlink:hover::before, .navlink.active::before, .navitem.open > .navlink::before { transform: scaleX(1); }
+  .navlink .chev { transition: transform .25s var(--ease); }
+  .navitem:hover > .navlink .chev, .navitem.open > .navlink .chev { transform: rotate(180deg); }
+  /* Méga-menus : fondu et glissement au lieu d'un affichage brutal */
+  .mega { display: block !important; opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; transition: opacity .22s var(--ease), transform .22s var(--ease), visibility 0s linear .22s; }
+  .navitem:hover .mega, .navitem.open .mega { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s; }
+  .mega .cols > div { opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+  .navitem:hover .mega .cols > div, .navitem.open .mega .cols > div { opacity: 1; transform: none; }
+  .navitem:hover .mega .cols > div:nth-child(2), .navitem.open .mega .cols > div:nth-child(2) { transition-delay: .05s; }
+  .navitem:hover .mega .cols > div:nth-child(3), .navitem.open .mega .cols > div:nth-child(3) { transition-delay: .1s; }
+}
+
+/* ---------- Boutons et liens ---------- */
+.btn { transition: background .2s var(--ease), color .2s var(--ease), box-shadow .25s var(--ease), transform .2s var(--ease); }
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 22px -14px rgba(11, 27, 77, .6); }
+.btn:active:not(:disabled) { transform: translateY(0) scale(.98); box-shadow: none; transition-duration: .08s; }
+.btn-red:hover:not(:disabled) { box-shadow: 0 12px 24px -12px rgba(225, 20, 30, .55); }
+.cta .p, .cta .c { transition: background .2s var(--ease), transform .3s var(--ease); }
+.cta:hover .c { transform: translateX(4px) rotate(-8deg); }
+.chip { transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease); }
+.chip:active { transform: scale(.96); }
+.icon-btn, .toc-item, .ln-item, .pi-title, .al-row, .forum-list button { transition: background .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease), color .2s var(--ease); }
+
+/* ---------- Cartes ---------- */
+.ccard, .domain, .pcard, .fac-card, .way, .admin-card, .req-card, .post, .ann, .live-card, .values > div, .research > div, .docs > div, .kpi-row > div, .gov-card {
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+}
+.values > div:hover, .research > div:hover, .docs > div:hover, .kpi-row > div:hover, .req-card:hover, .gov-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.ccard .ph img, .fac-card img, .faculty-head img, .media-frame img { transition: transform .8s var(--ease); }
+.fac-card:hover img { transform: scale(1.06); }
+.media-frame:hover img { transform: scale(1.02); }
+.media-frame::before, .media-frame::after { transition: transform .6s var(--ease); }
+.media-frame:hover::before { transform: translate(-6px, -6px); }
+.media-frame:hover::after { transform: translate(6px, 6px); }
+.why > div .ic, .research .ic, .mv-card .ic, .docs .ic { transition: transform .4s var(--ease); }
+.why > div:hover .ic, .research > div:hover .ic, .mv-card:hover .ic, .docs > div:hover .ic { transform: translateY(-3px) scale(1.06); }
+
+/* ---------- Accroche de l'accueil : zoom très lent de la photo ---------- */
+.home-hero .bg { animation: kenburns 24s var(--ease-in-out) infinite alternate; transform-origin: 60% 40%; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+.home-hero .reveal:nth-child(1) > * { animation: rise .7s var(--ease) both; }
+.home-hero .reveal:nth-child(1) > *:nth-child(2) { animation-delay: .08s; }
+.home-hero .reveal:nth-child(1) > *:nth-child(3) { animation-delay: .16s; }
+.home-hero .reveal:nth-child(1) > *:nth-child(4) { animation-delay: .24s; }
+.hero-band a { transition: background .25s var(--ease), padding-left .25s var(--ease); }
+.hero-band a:hover { padding-left: 24px; }
+.page-hero { overflow: hidden; }
+.page-hero h1, .page-hero p, .page-hero .crumbs { animation: rise .6s var(--ease) both; }
+.page-hero p { animation-delay: .08s; }
+
+/* ---------- Progression ---------- */
+@property --p { syntax: '<number>'; inherits: false; initial-value: 0; }
+.pb-ring { transition: --p .9s var(--ease); }
+.progress i { transition: width .9s var(--ease); animation: grow .9s var(--ease) both; transform-origin: left; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- Accordéons (programme, FAQ) ---------- */
+details > summary::after { transition: transform .25s var(--ease); }
+details[open] > :not(summary) { animation: unfold .35s var(--ease) both; }
+@keyframes unfold { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Lecteur de cours, quiz, retours ---------- */
+.chapter > * { animation: rise .5s var(--ease) both; }
+.chapter > *:nth-child(2) { animation-delay: .04s; }
+.chapter > *:nth-child(3) { animation-delay: .08s; }
+.chapter > *:nth-child(4) { animation-delay: .12s; }
+.qo-mark { transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease), transform .2s var(--ease); }
+.qo.sel .qo-mark { transform: scale(1.08); }
+.qo:active { transform: scale(.995); }
+.quiz-result, .ch-done.is-done, .alert.ok, .cert-box.got { animation: pop .45s var(--ease) both; }
+@keyframes pop { 0% { opacity: 0; transform: scale(.97) translateY(6px); } 100% { opacity: 1; transform: none; } }
+.ch-done-ic, .ti-state { transition: background .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
+.ch-done.is-done .ch-done-ic { animation: check .5s var(--ease) both; }
+@keyframes check { 0% { transform: scale(.4); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.alert.err { animation: shake .35s var(--ease-in-out) both; }
+@keyframes shake { 0%, 100% { transform: none; } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* ---------- Onglets ---------- */
+.space-tabs button, .admin-tabs [role=tab], .admin-bar nav a, .subnav a { transition: color .2s var(--ease), border-color .25s var(--ease); }
+.space > * { animation: rise .45s var(--ease) both; }
+
+/* ---------- Panneaux et superpositions ---------- */
+.drawer-bg, .nav-overlay, .toc-overlay { transition: opacity .25s var(--ease), visibility .25s; }
+.drawer-bg { animation: fade .25s var(--ease) both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.drawer-panel { animation: slidein .35s var(--ease) both; }
+
+/* ---------- Champs de formulaire ---------- */
+.field input, .field select, .field textarea { transition: border-color .2s var(--ease), box-shadow .25s var(--ease), background .2s var(--ease); }
+
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Accessibilité : aucune animation si l'utilisateur en demande moins ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .home-hero .bg { animation: none; }
+  .mega, .mega .cols > div { transition: none !important; }
+}
+

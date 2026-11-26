@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /espace
+Disallow: /connexion
+
+Sitemap: https://ach-academy.org/sitemap.xml
